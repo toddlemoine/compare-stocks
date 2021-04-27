@@ -1,14 +1,20 @@
-import React from "react";
-import "./App.css";
+import React from 'react';
+import { AppStoreProvider } from '../hooks/use_app_store';
+import { AppStore } from '../stores/app_store';
+import styles from './App.module.css';
+import { SymbolSearchForm } from './symbol_search_form';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Stock Comparison</h1>
-      </header>
-    </div>
-  );
+    return (
+        <AppStoreProvider value={new AppStore()}>
+            <div className={styles.root}>
+                <header className="App-header">
+                    <h1>Stock Comparison</h1>
+                </header>
+                <SymbolSearchForm />
+            </div>
+        </AppStoreProvider>
+    );
 }
 
 export default App;
