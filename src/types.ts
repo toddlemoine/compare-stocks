@@ -14,3 +14,5 @@ export type AVSearchResult = {
     symbol: string;
     name: string;
 };
+
+export type StockSymbol = string;

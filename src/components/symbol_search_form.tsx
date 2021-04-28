@@ -1,11 +1,4 @@
-import React, {
-    ChangeEvent,
-    FormEvent,
-    KeyboardEvent,
-    MouseEvent,
-    useCallback,
-    useState,
-} from 'react';
+import React, { ChangeEvent, FormEvent, MouseEvent, useCallback, useState } from 'react';
 import { Observer } from 'mobx-react';
 import { useAppStore } from '../hooks/use_app_store';
 import { log } from '../utils';
@@ -23,10 +16,14 @@ export const SymbolSearchForm: React.FC = () => {
         [],
     );
 
-    const handleSubmit = useCallback((e: FormEvent) => {
-        e.preventDefault();
-        log.info('submit form');
-    }, []);
+    const handleSubmit = useCallback(
+        (e: FormEvent) => {
+            e.preventDefault();
+            log.info('submit form', term);
+            appStore.addStock(term);
+        },
+        [appStore, term],
+    );
 
     const handleAddClick = useCallback((e: MouseEvent) => {
         log.info('add stock');
@@ -46,8 +43,10 @@ export const SymbolSearchForm: React.FC = () => {
             {() => {
                 return (
                     <form name="symbol search" className={styles.root} onSubmit={handleSubmit}>
-                        <label htmlFor="symbol_search_input">
+                        <label className={styles.label} htmlFor="symbol_search_input">
                             Stock symbol or company name
+                        </label>
+                        <div>
                             <input
                                 id="symbol_search_input"
                                 onChange={handleChange}
@@ -55,8 +54,8 @@ export const SymbolSearchForm: React.FC = () => {
                                 list="symbol-search-results"
                                 value={term}
                             />
-                        </label>
-                        <button onClick={handleAddClick}>Add</button>
+                            <button onClick={handleAddClick}>Add</button>
+                        </div>
                         <datalist data-testid="symbol_list" id="symbol-search-results">
                             {appStore.searchResults.map(result => (
                                 <option key={result.symbol} value={result.symbol}>
