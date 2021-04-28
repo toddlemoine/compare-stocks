@@ -19,15 +19,13 @@ export const SymbolSearchForm: React.FC = () => {
     const handleSubmit = useCallback(
         (e: FormEvent) => {
             e.preventDefault();
-            log.info('submit form', term);
-            appStore.addStock(term);
+            if (appStore.canAddStock) {
+                log.info('submit form', term);
+                appStore.addStock(term);
+            }
         },
         [appStore, term],
     );
-
-    const handleAddClick = useCallback((e: MouseEvent) => {
-        log.info('add stock');
-    }, []);
 
     const handleChange = useCallback(
         (e: ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +52,7 @@ export const SymbolSearchForm: React.FC = () => {
                                 list="symbol-search-results"
                                 value={term}
                             />
-                            <button onClick={handleAddClick}>Add</button>
+                            <button>Add</button>
                         </div>
                         <datalist data-testid="symbol_list" id="symbol-search-results">
                             {appStore.searchResults.map(result => (

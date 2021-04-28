@@ -1,23 +1,29 @@
 import { AVSearchResult, StockSymbol } from './../types';
-import { action, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable, computed } from 'mobx';
 import { search } from '../api';
 import { log } from '../utils';
 
 export class AppStore {
+    private maxAllowedStocks: number = 3;
     public pending: boolean = false;
     public error: string = '';
     public searchResults: AVSearchResult[] = [];
-    public selectedStockSymbols: Set<StockSymbol> = new Set();
+    public selectedStocks: AVSearchResult[] = [];
 
     constructor() {
         makeObservable(this, {
             pending: observable,
             error: observable,
             searchResults: observable,
-            selectedStockSymbols: observable,
+            selectedStocks: observable,
             search: action,
             addStock: action,
+            canAddStock: computed,
         });
+    }
+
+    public get canAddStock() {
+        return this.selectedStocks.length <= this.maxAllowedStocks;
     }
 
     public async search(term: string): Promise<void> {
@@ -37,6 +43,9 @@ export class AppStore {
     }
 
     public addStock(symbol: StockSymbol) {
-        this.selectedStockSymbols.add(symbol);
+        const result = this.searchResults.find(r => r.symbol === symbol);
+        if (result) {
+            this.selectedStocks.push(result);
+        }
     }
 }

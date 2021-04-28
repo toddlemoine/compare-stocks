@@ -11,8 +11,8 @@ export const SelectedStocks: React.FC = () => {
             {() => {
                 return (
                     <section className={styles.root} aria-label="selected stocks">
-                        {Array.from(appStore.selectedStockSymbols).map(symbol => (
-                            <StockCard key={symbol} symbol={symbol} />
+                        {Array.from(appStore.selectedStocks).map(({ symbol, name }) => (
+                            <StockCard key={symbol} symbol={symbol} name={name} />
                         ))}
                     </section>
                 );

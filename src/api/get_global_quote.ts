@@ -8,7 +8,7 @@ type AVGlobalQuoteResponse = {
 const getGlobalQuoteJSONResponse = async (symbol: StockSymbol): Promise<AVGlobalQuoteResponse> => {
     const resp = await get('/query', {
         function: 'GLOBAL_QUOTE',
-        keywords: symbol,
+        symbol: symbol,
     });
     return await resp.json();
 };

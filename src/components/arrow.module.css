@@ -1,0 +1,18 @@
+.root {
+    height: 55px;
+    width: 55px;
+}
+
+.root svg {
+    height: 100%;
+    width: 100%;
+}
+
+.up {
+    transform: rotate(180deg);
+    fill: green;
+}
+
+.down {
+    fill: red;
+}

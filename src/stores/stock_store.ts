@@ -1,7 +1,7 @@
+import { toDollarCurrency, formatTradingPrice } from './../utils/number_utils';
 import { StockSymbol } from './../types';
-import { action, computed, makeObservable, observable } from 'mobx';
-// import { search } from '../api';
-// import { log } from '../utils';
+import { action, computed, makeAutoObservable, observable } from 'mobx';
+import { getGlobalQuote } from '../api';
 
 enum StockStoreState {
     LOADING,
@@ -9,15 +9,32 @@ enum StockStoreState {
     ERROR,
 }
 
-class StockStore {
-    private state: StockStoreState = StockStoreState.LOADING;
+export class StockStore {
+    public state: StockStoreState = StockStoreState.LOADING;
+    public change?: number;
+    public changePercent?: number;
+    public high?: string;
+    public latestTradingDay?: string;
+    public low?: string;
+    public open?: string;
+    public previousClose?: string;
+    public price?: string;
+    public volume?: string;
+    public symbol: string;
+    public name: string;
 
-    constructor(private readonly symbol: StockSymbol) {
-        makeObservable(this, {
-            fetchOverview: action,
+    constructor(symbol: StockSymbol, name: string) {
+        this.symbol = symbol;
+        this.name = name;
+
+        makeAutoObservable(this, {
+            fetchQuote: action,
             loading: computed,
+            fulfilled: computed,
+            error: computed,
+            state: observable,
         });
-        this.fetchOverview();
+        this.fetchQuote();
     }
 
     public get loading(): boolean {
@@ -32,5 +49,23 @@ class StockStore {
         return this.state === StockStoreState.ERROR;
     }
 
-    public async fetchOverview(): Promise<void> {}
+    public async fetchQuote(): Promise<void> {
+        try {
+            const quote = await getGlobalQuote(this.symbol);
+            if (quote) {
+                this.change = parseFloat(quote.change);
+                this.changePercent = parseFloat(quote.changePercent);
+                this.high = formatTradingPrice(quote.high);
+                this.latestTradingDay = quote.latestTradingDay;
+                this.low = formatTradingPrice(quote.low);
+                this.open = quote.open;
+                this.previousClose = quote.previousClose;
+                this.price = toDollarCurrency(quote.price);
+                this.volume = quote.volume;
+                this.state = StockStoreState.FULFILLED;
+            }
+        } catch (error) {
+            this.state = StockStoreState.ERROR;
+        }
+    }
 }
