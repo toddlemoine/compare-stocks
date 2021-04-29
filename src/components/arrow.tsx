@@ -4,12 +4,13 @@ import styles from './arrow.module.css';
 type ArrowProps = {
     direction: 'up' | 'down';
     className?: string;
+    label: string;
 };
 
-export const Arrow = ({ direction = 'down', className }: ArrowProps) => {
+export const Arrow = ({ direction = 'down', className, label }: ArrowProps) => {
     const classes = [styles.root, className].filter(Boolean).join(' ');
     return (
-        <div className={classes}>
+        <div className={classes} aria-label={label}>
             <svg className={styles[direction]} viewBox="0 0 24 24" width="24" height="24">
                 <path
                     fillRule="evenodd"
