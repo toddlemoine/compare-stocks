@@ -4,6 +4,14 @@ import styles from './selected_stocks.module.css';
 import { useAppStore } from '../hooks/use_app_store';
 import { StockCard } from './stock_card';
 
+const EmptyCard: React.FC = () => {
+    return (
+        <div className={styles.emptyCard}>
+            Pick an additional stock symbol in the search box above to display stock information.
+        </div>
+    );
+};
+
 export const SelectedStocks: React.FC = () => {
     const appStore = useAppStore();
     return (
@@ -19,6 +27,7 @@ export const SelectedStocks: React.FC = () => {
                                 onRemove={() => appStore.removeStock(index)}
                             />
                         ))}
+                        {appStore.canAddStock && <EmptyCard />}
                     </section>
                 );
             }}

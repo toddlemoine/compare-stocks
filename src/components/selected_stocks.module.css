@@ -1,3 +1,11 @@
 .root {
     display: flex;
 }
+.emptyCard {
+    color: #999;
+    display: grid;
+    place-items: center;
+    padding: 3rem;
+    max-width: 350px;
+    min-width: 250px;
+}
