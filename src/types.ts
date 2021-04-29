@@ -42,3 +42,17 @@ export type AVGlobalQuote = {
     symbol: string;
     volume: string;
 };
+
+export type AVAnnualEarning = {
+    fiscalDateEarning: Date;
+    reportedEPS: number;
+};
+
+export type AVQuarterlyEarning = {
+    fiscalDateEarning: string;
+    reportedEPS: string;
+    estimatedEPS: string;
+    reportedDate: string;
+    surprise: string;
+    surprisePercentage: string;
+};

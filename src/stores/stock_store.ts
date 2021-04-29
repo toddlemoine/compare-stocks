@@ -1,10 +1,12 @@
+import { getEarnings } from './../api/get_earnings';
 import { toDollarCurrency, formatTradingPrice } from './../utils/number_utils';
-import { StockSymbol } from './../types';
+import { AVAnnualEarning, AVQuarterlyEarning, StockSymbol } from './../types';
 import { action, computed, makeAutoObservable, observable, runInAction } from 'mobx';
 import { getGlobalQuote } from '../api';
 
 enum StockStoreState {
     LOADING,
+    PARTIALLY_FULFILLED,
     FULFILLED,
     ERROR,
 }
@@ -22,19 +24,22 @@ export class StockStore {
     public volume?: string;
     public symbol: string;
     public name: string;
+    public annualEarnings: AVAnnualEarning[] = [];
+    public quarterlyEarnings: AVQuarterlyEarning[] = [];
 
     constructor(symbol: StockSymbol, name: string) {
         this.symbol = symbol;
         this.name = name;
 
         makeAutoObservable(this, {
-            fetchQuote: action,
+            fetch: action,
             loading: computed,
             fulfilled: computed,
             error: computed,
             state: observable,
         });
-        this.fetchQuote();
+
+        this.fetch();
     }
 
     public get loading(): boolean {
@@ -49,7 +54,7 @@ export class StockStore {
         return this.state === StockStoreState.ERROR;
     }
 
-    public async fetchQuote(): Promise<void> {
+    public async fetch(): Promise<void> {
         try {
             const quote = await getGlobalQuote(this.symbol);
             if (quote) {
@@ -63,6 +68,14 @@ export class StockStore {
                     this.previousClose = quote.previousClose;
                     this.price = toDollarCurrency(quote.price);
                     this.volume = quote.volume;
+                    this.state = StockStoreState.PARTIALLY_FULFILLED;
+                });
+
+                const { annualEarnings, quarterlyEarnings } = await getEarnings(this.symbol);
+
+                runInAction(() => {
+                    this.annualEarnings = annualEarnings;
+                    this.quarterlyEarnings = quarterlyEarnings;
                     this.state = StockStoreState.FULFILLED;
                 });
             }

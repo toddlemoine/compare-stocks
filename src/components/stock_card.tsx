@@ -4,6 +4,7 @@ import { useStockStore } from '../hooks/use_stock_store';
 import { StockSymbol } from '../types';
 import styles from './stock_card.module.css';
 import { ChangeIndicator } from './change_indicator';
+import { EarningsChart } from './earnings_chart';
 
 const Loading: React.FC = () => {
     const ref = useRef<HTMLProgressElement>(null);
@@ -35,6 +36,7 @@ export const StockCard: React.FC<{ symbol: StockSymbol; name: string; onRemove: 
                             {store.loading && <Loading />}
                             {!store.loading && (
                                 <>
+                                    <EarningsChart data={store.annualEarnings} />
                                     <ChangeIndicator
                                         closingPrice={store.price!}
                                         changePercent={store.changePercent!}

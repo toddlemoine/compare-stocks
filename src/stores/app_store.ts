@@ -10,7 +10,7 @@ export class AppStore {
     public searchResults: AVSearchResult[] = [];
     public selectedStocks: AVSearchResult[] = [
         { name: 'Apple', symbol: 'AAPL' },
-        { name: 'Slack', symbol: 'WORK' },
+        // { name: 'Slack', symbol: 'WORK' },
     ];
 
     constructor() {

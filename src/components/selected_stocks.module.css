@@ -2,7 +2,7 @@
     display: flex;
 }
 .emptyCard {
-    color: #999;
+    color: #6d6d6d;
     display: grid;
     place-items: center;
     padding: 3rem;
