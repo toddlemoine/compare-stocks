@@ -54,7 +54,7 @@ export class AppStore {
         }
     }
 
-    public removeStock(symbol: StockSymbol) {
-        this.selectedStocks = this.selectedStocks.filter(stock => stock.symbol !== symbol);
+    public removeStock(index: number) {
+        this.selectedStocks.splice(index, 1);
     }
 }

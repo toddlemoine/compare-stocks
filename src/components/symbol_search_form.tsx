@@ -58,7 +58,7 @@ export const SymbolSearchForm: React.FC = () => {
                         <label className={styles.label} htmlFor="symbol_search_input">
                             Enter a stock symbol or company name
                         </label>
-                        <div>
+                        <div className={styles.inputRow}>
                             <input
                                 id="symbol_search_input"
                                 ref={inputRef}
