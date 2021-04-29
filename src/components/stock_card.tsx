@@ -16,41 +16,54 @@ const Loading: React.FC = () => {
     return <progress ref={ref} />;
 };
 
-export const StockCard: React.FC<{ symbol: StockSymbol; name: string }> = ({ symbol, name }) => {
+export const StockCard: React.FC<{ symbol: StockSymbol; name: string; onRemove: () => void }> = ({
+    symbol,
+    name,
+    onRemove,
+}) => {
     const store = useStockStore(symbol, name);
     return (
         <Observer>
             {() => {
                 return (
                     <article className={styles.root}>
-                        <header>
-                            <h1>{name}</h1>
-                            <span>{symbol}</span>
-                        </header>
-                        {store.loading && <Loading />}
-                        {!store.loading && (
-                            <>
-                                <ChangeIndicator
-                                    closingPrice={store.price!}
-                                    changePercent={store.changePercent!}
-                                />
-                                <div>
-                                    <h2>Stats</h2>
-                                    <table className={styles.dailyPriceTable}>
-                                        <tbody>
-                                            <tr>
-                                                <th>High</th>
-                                                <td>{store.high}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Low</th>
-                                                <td>{store.low}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </>
-                        )}
+                        <div className={styles.content}>
+                            <header>
+                                <h1>{name}</h1>
+                                <span>{symbol}</span>
+                            </header>
+                            {store.loading && <Loading />}
+                            {!store.loading && (
+                                <>
+                                    <ChangeIndicator
+                                        closingPrice={store.price!}
+                                        changePercent={store.changePercent!}
+                                    />
+                                    <div>
+                                        <h2>Stats</h2>
+                                        <table className={styles.dailyPriceTable}>
+                                            <tbody>
+                                                <tr>
+                                                    <th>High</th>
+                                                    <td>{store.high}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Low</th>
+                                                    <td>{store.low}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </>
+                            )}
+                            <button
+                                className={styles.removeButton}
+                                aria-label={`remove ${name} from comparison`}
+                                onClick={onRemove}
+                            >
+                                ×
+                            </button>
+                        </div>
                     </article>
                 );
             }}

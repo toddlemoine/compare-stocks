@@ -1,4 +1,3 @@
 .root {
-    display: grid;
-    grid-auto-columns: auto;
+    display: flex;
 }

@@ -1,20 +1,23 @@
 .root {
-    max-width: 300px;
-    width: auto;
-    border: 1px solid #ddd;
     padding: 1rem;
-    display: grid;
-    grid-template-rows: 90px 70px 1fr;
-    min-height: 250px;
+    max-width: 350px;
+    min-width: 250px;
+    border: 1px solid #ddd;
+    position: relative;
 }
 
-.root h1 {
+.content {
+    grid-template-rows: 90px 70px 1fr;
+    display: grid;
+}
+
+.content h1 {
     margin: 0;
     font-weight: normal;
     font-size: 1.7rem;
 }
 
-.root h2 {
+.content h2 {
     margin: 0;
     font-weight: normal;
 }
@@ -31,4 +34,15 @@
 
 .dailyPriceTable td {
     text-align: right;
+}
+
+.removeButton {
+    background: none;
+    border: none;
+    top: 0;
+    right: 0;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    font-size: 1.2rem;
 }

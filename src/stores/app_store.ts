@@ -18,12 +18,13 @@ export class AppStore {
             selectedStocks: observable,
             search: action,
             addStock: action,
+            removeStock: action,
             canAddStock: computed,
         });
     }
 
     public get canAddStock() {
-        return this.selectedStocks.length <= this.maxAllowedStocks;
+        return this.selectedStocks.length < this.maxAllowedStocks;
     }
 
     public async search(term: string): Promise<void> {
@@ -51,5 +52,9 @@ export class AppStore {
         if (result) {
             this.selectedStocks.push(result);
         }
+    }
+
+    public removeStock(symbol: StockSymbol) {
+        this.selectedStocks = this.selectedStocks.filter(stock => stock.symbol !== symbol);
     }
 }
