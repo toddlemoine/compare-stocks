@@ -1,0 +1,31 @@
+.root {
+    display: grid;
+    grid-template-columns: 55px 1fr;
+    grid-template-rows: 1fr 2fr;
+    grid-template-areas:
+        'arrow price'
+        '. percentChange';
+}
+.arrow {
+    grid-column: arrow;
+    grid-row: arrow / span 2;
+}
+
+.price {
+    grid-area: price;
+    font-size: 2rem;
+}
+
+.percentChange {
+    grid-area: percentChange;
+}
+
+.percentChangeUp {
+    composes: percentChange;
+    color: green;
+}
+
+.percentChangeDown {
+    composes: percentChange;
+    color: red;
+}

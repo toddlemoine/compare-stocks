@@ -1,5 +1,5 @@
 import { AVSearchResult, StockSymbol } from './../types';
-import { action, makeObservable, observable, computed } from 'mobx';
+import { action, makeObservable, observable, computed, runInAction } from 'mobx';
 import { search } from '../api';
 import { log } from '../utils';
 
@@ -32,13 +32,17 @@ export class AppStore {
 
         try {
             const results = await search(term);
-            this.searchResults = results;
-            this.pending = false;
+            runInAction(() => {
+                this.searchResults = results;
+                this.pending = false;
+            });
         } catch (error) {
             log.error(`Error searching for ${term}`, error);
-            this.searchResults = [];
-            this.error = 'Error doing search';
-            this.pending = false;
+            runInAction(() => {
+                this.searchResults = [];
+                this.error = 'Error doing search';
+                this.pending = false;
+            });
         }
     }
 

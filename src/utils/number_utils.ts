@@ -4,8 +4,8 @@ export const toDollarCurrency = (amount: string): string => {
     );
 };
 
-export const formatPercent = (percent: string): string => {
-    return `${parseFloat(percent).toFixed(2)}%`;
+export const formatPercent = (percent: string | number): string => {
+    return `${parseFloat(percent.toString()).toFixed(2)}%`;
 };
 
 export const formatTradingPrice = (price: string): string => {

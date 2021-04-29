@@ -4,4 +4,31 @@
     border: 1px solid #ddd;
     padding: 1rem;
     display: grid;
+    grid-template-rows: 90px 70px 1fr;
+    min-height: 250px;
+}
+
+.root h1 {
+    margin: 0;
+    font-weight: normal;
+    font-size: 1.7rem;
+}
+
+.root h2 {
+    margin: 0;
+    font-weight: normal;
+}
+
+.dailyPriceTable {
+    width: 100%;
+    max-width: 200px;
+}
+
+.dailyPriceTable th {
+    width: 90%;
+    text-align: left;
+}
+
+.dailyPriceTable td {
+    text-align: right;
 }

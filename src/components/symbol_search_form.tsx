@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, MouseEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import { Observer } from 'mobx-react';
 import { useAppStore } from '../hooks/use_app_store';
 import { log } from '../utils';

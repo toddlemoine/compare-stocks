@@ -1,9 +1,15 @@
 import React from 'react';
 import styles from './arrow.module.css';
 
-export const Arrow: React.FC<{ direction: 'up' | 'down' }> = ({ direction = 'down' }) => {
+type ArrowProps = {
+    direction: 'up' | 'down';
+    className?: string;
+};
+
+export const Arrow = ({ direction = 'down', className }: ArrowProps) => {
+    const classes = [styles.root, className].filter(Boolean).join(' ');
     return (
-        <div className={styles.root}>
+        <div className={classes}>
             <svg className={styles[direction]} viewBox="0 0 24 24" width="24" height="24">
                 <path
                     fill-rule="evenodd"

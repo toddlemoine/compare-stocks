@@ -1,8 +1,8 @@
 .root {
-    display: grid;
 }
 
 .label {
+    display: block;
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
@@ -11,5 +11,5 @@
     font-size: 1.4rem;
     padding: 0.25rem 0.35rem;
     width: 25%;
-    min-weight: 200px;
+    min-width: 200px;
 }

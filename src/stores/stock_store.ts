@@ -1,6 +1,6 @@
 import { toDollarCurrency, formatTradingPrice } from './../utils/number_utils';
 import { StockSymbol } from './../types';
-import { action, computed, makeAutoObservable, observable } from 'mobx';
+import { action, computed, makeAutoObservable, observable, runInAction } from 'mobx';
 import { getGlobalQuote } from '../api';
 
 enum StockStoreState {
@@ -53,19 +53,23 @@ export class StockStore {
         try {
             const quote = await getGlobalQuote(this.symbol);
             if (quote) {
-                this.change = parseFloat(quote.change);
-                this.changePercent = parseFloat(quote.changePercent);
-                this.high = formatTradingPrice(quote.high);
-                this.latestTradingDay = quote.latestTradingDay;
-                this.low = formatTradingPrice(quote.low);
-                this.open = quote.open;
-                this.previousClose = quote.previousClose;
-                this.price = toDollarCurrency(quote.price);
-                this.volume = quote.volume;
-                this.state = StockStoreState.FULFILLED;
+                runInAction(() => {
+                    this.change = parseFloat(quote.change);
+                    this.changePercent = parseFloat(quote.changePercent);
+                    this.high = formatTradingPrice(quote.high);
+                    this.latestTradingDay = quote.latestTradingDay;
+                    this.low = formatTradingPrice(quote.low);
+                    this.open = quote.open;
+                    this.previousClose = quote.previousClose;
+                    this.price = toDollarCurrency(quote.price);
+                    this.volume = quote.volume;
+                    this.state = StockStoreState.FULFILLED;
+                });
             }
         } catch (error) {
-            this.state = StockStoreState.ERROR;
+            runInAction(() => {
+                this.state = StockStoreState.ERROR;
+            });
         }
     }
 }
