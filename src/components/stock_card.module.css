@@ -1,14 +1,15 @@
 .root {
     padding: 1rem;
-    max-width: 350px;
+    width: 30%;
     min-width: 250px;
     border: 1px solid #ddd;
     position: relative;
+    margin-right: 0.2rem;
 }
 
 .content {
-    grid-template-rows: 90px 70px 85px 250px;
-    display: grid;
+    display: flex;
+    flex-direction: column;
 }
 
 .content h1 {
