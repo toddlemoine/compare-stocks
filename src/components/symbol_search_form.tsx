@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import { Observer } from 'mobx-react';
 import { useAppStore } from '../hooks/use_app_store';
 import debounce from 'lodash.debounce';
@@ -12,13 +12,6 @@ export const SymbolSearchForm: React.FC = () => {
     const [term, setTerm] = useState('');
     const [autocompleteKey, setAutocompleteKey] = useState(Date.now);
     const appStore = useAppStore();
-    const inputRef = useRef<HTMLInputElement | null>(null);
-
-    useEffect(() => {
-        if (term === '') {
-            inputRef.current?.focus();
-        }
-    }, [term, inputRef]);
 
     const debouncedSearch = useCallback(
         debounce((term: string) => {
@@ -34,7 +27,9 @@ export const SymbolSearchForm: React.FC = () => {
     const handleInputChange = useCallback(
         (e: ChangeEvent<{}>, value: string) => {
             setTerm(value);
-            debouncedSearch(value);
+            if (value.length !== 0) {
+                debouncedSearch(value);
+            }
         },
         [setTerm, debouncedSearch],
     );
@@ -43,8 +38,9 @@ export const SymbolSearchForm: React.FC = () => {
         (e: ChangeEvent<unknown>, value: AVSearchResult | null) => {
             if (value?.symbol) {
                 appStore.addStock(value.symbol);
-                setAutocompleteKey(Date.now);
                 setTerm('');
+                // This "resets" the control, forcing a re-render to clear it.
+                setAutocompleteKey(Date.now);
             }
         },
         [appStore],
@@ -69,7 +65,7 @@ export const SymbolSearchForm: React.FC = () => {
                                 loading={appStore.loading}
                                 onChange={handleChange}
                                 disabled={!appStore.canAddStock}
-                                getOptionSelected={option => option.symbol === term}
+                                filterOptions={(options: AVSearchResult[]) => options}
                                 renderOption={(option: AVSearchResult) => (
                                     <div className={styles.option}>
                                         <span className={styles.optionSymbol}>{option.symbol}</span>

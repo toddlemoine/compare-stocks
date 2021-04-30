@@ -26,6 +26,7 @@ export class StockStore {
     public name: string;
     public annualEarnings: AVAnnualEarning[] = [];
     public quarterlyEarnings: AVQuarterlyEarning[] = [];
+    public lastError?: Error;
 
     constructor(symbol: StockSymbol, name: string) {
         this.symbol = symbol;
@@ -82,6 +83,7 @@ export class StockStore {
         } catch (error) {
             runInAction(() => {
                 this.state = StockStoreState.ERROR;
+                this.lastError = error;
             });
         }
     }

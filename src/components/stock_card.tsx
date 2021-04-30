@@ -5,6 +5,17 @@ import { StockSymbol } from '../types';
 import styles from './stock_card.module.css';
 import { ChangeIndicator } from './change_indicator';
 import { EarningsChart } from './earnings_chart';
+import { Button } from '@material-ui/core';
+
+const Error: React.FC<{ message?: string; onRetry: () => void }> = ({ message, onRetry }) => {
+    const text = ['There was a problem fetching stock', message].filter(Boolean).join(': ');
+    return (
+        <div className={styles.error}>
+            <p>{text}.</p>
+            <Button onClick={onRetry}>Retry</Button>
+        </div>
+    );
+};
 
 const Loading: React.FC = () => {
     const ref = useRef<HTMLProgressElement>(null);
@@ -33,8 +44,11 @@ export const StockCard: React.FC<{ symbol: StockSymbol; name: string; onRemove: 
                                 <h1>{name}</h1>
                                 <span>{symbol}</span>
                             </header>
+                            {store.error && (
+                                <Error message={store.lastError?.message} onRetry={store.fetch} />
+                            )}
                             {store.loading && <Loading />}
-                            {!store.loading && (
+                            {store.fulfilled && (
                                 <>
                                     <ChangeIndicator
                                         closingPrice={store.price!}

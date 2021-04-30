@@ -14,10 +14,8 @@ export class AppStore {
     public pending: boolean = false;
     public error: string = '';
     public searchResults: AVSearchResult[] = [];
-    public selectedStocks: AVSearchResult[] = [
-        { name: 'Apple', symbol: 'AAPL' },
-        // { name: 'Slack', symbol: 'WORK' },
-    ];
+    public selectedStocks: AVSearchResult[] = [];
+    // [ { name: 'Apple', symbol: 'AAPL' }, ];
 
     public state: AppStoreState = AppStoreState.INITIAL;
 

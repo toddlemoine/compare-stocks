@@ -1,5 +1,5 @@
 import React from 'react';
-import { within, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { SymbolSearchForm } from './symbol_search_form';
 import { AppStoreProvider } from '../hooks/use_app_store';
 import { AppStore } from '../stores/app_store';
@@ -21,7 +21,9 @@ describe('SymbolSearchForm', () => {
 
     it('has a labelled input', () => {
         renderWithStore(<SymbolSearchForm />, new AppStore());
-        const input = screen.getByLabelText('Stock symbol or company name');
+        const input = screen.getByLabelText(
+            'Enter up to 3 stocks to compare the current stock prices.',
+        );
         expect(input).toBeInTheDocument();
     });
 

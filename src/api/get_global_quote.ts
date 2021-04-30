@@ -3,6 +3,7 @@ import { get } from './base';
 
 type AVGlobalQuoteResponse = {
     'Global Quote': RawAVGlobalQuote;
+    Note?: string;
 };
 
 const getGlobalQuoteJSONResponse = async (symbol: StockSymbol): Promise<AVGlobalQuoteResponse> => {
@@ -26,5 +27,8 @@ const cleanRawQuote = (quote: RawAVGlobalQuote): AVGlobalQuote => {
 
 export const getGlobalQuote = async (symbol: string): Promise<AVGlobalQuote | undefined> => {
     const resp = await getGlobalQuoteJSONResponse(symbol);
+    if (resp.Note) {
+        throw Error('API limit reached');
+    }
     return resp['Global Quote'] ? cleanRawQuote(resp['Global Quote']) : undefined;
 };
