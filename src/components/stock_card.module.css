@@ -7,7 +7,7 @@
 }
 
 .content {
-    grid-template-rows: 90px 70px 1fr;
+    grid-template-rows: 90px 70px 85px 250px;
     display: grid;
 }
 

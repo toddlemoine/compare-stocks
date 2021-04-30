@@ -36,7 +36,6 @@ export const StockCard: React.FC<{ symbol: StockSymbol; name: string; onRemove: 
                             {store.loading && <Loading />}
                             {!store.loading && (
                                 <>
-                                    <EarningsChart data={store.annualEarnings} />
                                     <ChangeIndicator
                                         closingPrice={store.price!}
                                         changePercent={store.changePercent!}
@@ -56,6 +55,7 @@ export const StockCard: React.FC<{ symbol: StockSymbol; name: string; onRemove: 
                                             </tbody>
                                         </table>
                                     </div>
+                                    <EarningsChart data={store.annualEarnings} />
                                 </>
                             )}
                             <button

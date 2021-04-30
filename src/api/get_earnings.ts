@@ -2,12 +2,12 @@ import { AVAnnualEarning, AVQuarterlyEarning, StockSymbol } from './../types';
 import { get } from './base';
 
 type RawAVAnnualEarning = {
-    fiscalDateEarning: string;
+    fiscalDateEnding: string;
     reportedEPS: string;
 };
 
 type RawAVQuarterlyEarning = {
-    fiscalDateEarning: string;
+    fiscalDateEnding: string;
     reportedEPS: string;
     estimatedEPS: string;
     reportedDate: string;
@@ -41,7 +41,7 @@ const parseValues = (resp: RawAVEarningsResponse): AVEarningsResponse => {
         quarterlyEarnings: resp.quarterlyEarnings,
         annualEarnings: resp.annualEarnings.map(item => {
             return {
-                fiscalDateEarning: new Date(item.fiscalDateEarning),
+                fiscalDateEnding: new Date(item.fiscalDateEnding),
                 reportedEPS: parseFloat(item.reportedEPS),
             };
         }),
