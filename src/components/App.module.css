@@ -1,5 +1,5 @@
 .root {
     padding: 1.5rem 3rem;
-    display: grid;
-    grid-template-rows: 80px 88px 1fr;
+    display: flex;
+    flex-direction: column;
 }
