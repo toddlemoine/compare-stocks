@@ -44,7 +44,7 @@ export type AVGlobalQuote = {
 };
 
 export type AVAnnualEarning = {
-    fiscalDateEnding: Date;
+    fiscalDateEnding: number;
     reportedEPS: number;
 };
 

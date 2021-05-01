@@ -2,7 +2,7 @@ import React from 'react';
 import { Observer } from 'mobx-react';
 import styles from './selected_stocks.module.css';
 import { useAppStore } from '../hooks/use_app_store';
-import { StockCard } from './stock_card';
+import { ConnectedStockCard } from './stock_card';
 
 const EmptyCard: React.FC = () => {
     return (
@@ -20,7 +20,7 @@ export const SelectedStocks: React.FC = () => {
                 return (
                     <section className={styles.root} aria-label="selected stocks">
                         {Array.from(appStore.selectedStocks).map(({ symbol, name }, index) => (
-                            <StockCard
+                            <ConnectedStockCard
                                 key={symbol}
                                 symbol={symbol}
                                 name={name}

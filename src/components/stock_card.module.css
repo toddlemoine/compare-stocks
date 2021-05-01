@@ -7,6 +7,10 @@
     margin-right: 0.2rem;
 }
 
+.block {
+    margin-bottom: 1rem;
+}
+
 .content {
     display: flex;
     flex-direction: column;
@@ -49,5 +53,5 @@
 }
 
 .error {
-    color: brown;
+    color: #b10804;
 }

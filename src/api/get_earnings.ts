@@ -39,12 +39,18 @@ const parseValues = (resp: RawAVEarningsResponse): AVEarningsResponse => {
     return {
         symbol: resp.symbol,
         quarterlyEarnings: resp.quarterlyEarnings,
-        annualEarnings: resp.annualEarnings.map(item => {
-            return {
-                fiscalDateEnding: new Date(item.fiscalDateEnding),
-                reportedEPS: parseFloat(item.reportedEPS),
-            };
-        }),
+        annualEarnings: resp.annualEarnings
+            .map(item => {
+                return {
+                    fiscalDateEnding: new Date(item.fiscalDateEnding).getTime(),
+                    reportedEPS: parseFloat(item.reportedEPS),
+                };
+            })
+            .sort((a: AVAnnualEarning, b: AVAnnualEarning) => {
+                if (a.fiscalDateEnding < b.fiscalDateEnding) return -1;
+                if (a.fiscalDateEnding > b.fiscalDateEnding) return 1;
+                return 0;
+            }),
     };
 };
 

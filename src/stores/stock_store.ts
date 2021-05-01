@@ -4,7 +4,7 @@ import { AVAnnualEarning, AVQuarterlyEarning, StockSymbol } from './../types';
 import { action, computed, makeAutoObservable, observable, runInAction } from 'mobx';
 import { getGlobalQuote } from '../api';
 
-enum StockStoreState {
+export enum StockStoreState {
     LOADING,
     PARTIALLY_FULFILLED,
     FULFILLED,
