@@ -39,7 +39,7 @@ const parseValues = (resp: RawAVEarningsResponse): AVEarningsResponse => {
     return {
         symbol: resp.symbol,
         quarterlyEarnings: resp.quarterlyEarnings,
-        annualEarnings: resp.annualEarnings
+        annualEarnings: (resp.annualEarnings ?? [])
             .map(item => {
                 return {
                     fiscalDateEnding: new Date(item.fiscalDateEnding).getTime(),

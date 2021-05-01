@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useCallback, useEffect, useState, useRef } from 'react';
 import { Observer } from 'mobx-react';
 import { useAppStore } from '../hooks/use_app_store';
 import debounce from 'lodash.debounce';
@@ -12,6 +12,14 @@ export const SymbolSearchForm: React.FC = () => {
     const [term, setTerm] = useState('');
     const [autocompleteKey, setAutocompleteKey] = useState(Date.now);
     const appStore = useAppStore();
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (term.length === 0) {
+            // focus
+            inputRef.current?.focus();
+        }
+    }, [term]);
 
     const debouncedSearch = useCallback(
         debounce((term: string) => {
@@ -79,6 +87,7 @@ export const SymbolSearchForm: React.FC = () => {
                                         value={term}
                                         InputProps={{
                                             ...params.InputProps,
+                                            inputRef: inputRef,
                                             endAdornment: (
                                                 <React.Fragment>
                                                     {appStore.loading ? (

@@ -23,7 +23,9 @@ const Error: React.FC<{ message?: string; onRetry: () => void }> = ({ message, o
     return (
         <div className={styles.error}>
             <p>{text}.</p>
-            <Button onClick={onRetry}>Retry</Button>
+            <Button variant="contained" color="secondary" onClick={onRetry}>
+                Retry
+            </Button>
         </div>
     );
 };
