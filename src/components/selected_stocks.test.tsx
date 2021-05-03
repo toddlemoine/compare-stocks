@@ -17,6 +17,8 @@ describe('SelectedStocks', () => {
     afterEach(() => server.resetHandlers());
     afterAll(() => server.close());
 
+    const placeholderRegex = /Pick an additional stock symbol in the search box above to display stock information./;
+
     const renderWithStore = (component, store) => {
         const Providers = ({ children }) => {
             return <AppStoreProvider value={store}>{children}</AppStoreProvider>;
@@ -27,9 +29,7 @@ describe('SelectedStocks', () => {
     test('shows a placeholder message when no stocks are selected', () => {
         const store = new AppStore();
         renderWithStore(<SelectedStocks />, store);
-        const msg = screen.getByText(
-            /Pick an additional stock symbol in the search box above to display stock information./,
-        );
+        const msg = screen.getByText(placeholderRegex);
         expect(msg).toBeInTheDocument();
     });
 
@@ -42,12 +42,29 @@ describe('SelectedStocks', () => {
             },
         ];
         renderWithStore(<SelectedStocks />, store);
-        const msg = screen.getByText(
-            /Pick an additional stock symbol in the search box above to display stock information./,
-        );
+        const msg = screen.getByText(placeholderRegex);
         expect(msg).toBeInTheDocument();
     });
 
+    test('does not show placeholder message when 3 stocks are selected', () => {
+        const store = new AppStore();
+        store.selectedStocks = [
+            {
+                name: 'Apples',
+                symbol: 'A',
+            },
+            {
+                name: 'Bananas',
+                symbol: 'B',
+            },
+            {
+                name: 'Kiwi',
+                symbol: 'K',
+            },
+        ];
+        renderWithStore(<SelectedStocks />, store);
+        expect(() => screen.getByText(placeholderRegex)).toThrowError();
+    });
     test('shows a selected stock', () => {
         const store = new AppStore();
         store.selectedStocks = [
