@@ -1,5 +1,5 @@
 import { Observer } from 'mobx-react';
-import React, { useRef, useEffect, ReactElement } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { StockStoreProvider, useStockStore } from '../hooks/use_stock_store';
 import { StockStore } from '../stores/stock_store';
 import { StockSymbol } from '../types';
