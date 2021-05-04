@@ -1,12 +1,11 @@
 import { Observer } from 'mobx-react';
 import React, { useRef, useEffect } from 'react';
-import { StockStoreProvider, useStockStore } from '../hooks/use_stock_store';
-import { StockStore } from '../stores/stock_store';
 import { StockSymbol } from '../types';
 import styles from './stock_card.module.css';
 import { ChangeIndicator } from './change_indicator';
 import { EarningsChart } from './earnings_chart';
 import { Button } from '@material-ui/core';
+import { useStockStore } from '../hooks/use_stock_store';
 
 type StockCardProps = {
     symbol: StockSymbol;
@@ -42,7 +41,7 @@ const Loading: React.FC = () => {
 };
 
 export const StockCard: React.FC<StockCardProps> = ({ symbol, name, onRemove }) => {
-    const store = useStockStore();
+    const store = useStockStore(symbol, name);
     return (
         <Observer>
             {() => {
@@ -101,13 +100,5 @@ export const StockCard: React.FC<StockCardProps> = ({ symbol, name, onRemove }) 
                 );
             }}
         </Observer>
-    );
-};
-
-export const ConnectedStockCard: React.FC<StockCardProps> = props => {
-    return (
-        <StockStoreProvider value={new StockStore(props.symbol, props.name)}>
-            <StockCard {...props} />
-        </StockStoreProvider>
     );
 };

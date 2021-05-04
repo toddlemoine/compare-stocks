@@ -1,5 +1,5 @@
 import { RawAVGlobalQuote, AVGlobalQuote, StockSymbol } from '../types';
-import { get } from './base';
+import { ApiError, get } from './base';
 
 type AVGlobalQuoteResponse = {
     'Global Quote': RawAVGlobalQuote;
@@ -28,7 +28,7 @@ const cleanRawQuote = (quote: RawAVGlobalQuote): AVGlobalQuote => {
 export const getGlobalQuote = async (symbol: string): Promise<AVGlobalQuote | undefined> => {
     const resp = await getGlobalQuoteJSONResponse(symbol);
     if (resp.Note) {
-        throw Error('API limit reached');
+        throw new ApiError('API limit reached');
     }
     return resp['Global Quote'] ? cleanRawQuote(resp['Global Quote']) : undefined;
 };

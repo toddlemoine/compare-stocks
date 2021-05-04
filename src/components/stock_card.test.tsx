@@ -1,60 +1,68 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { StockCard } from './stock_card';
-import { StockStoreProvider } from '../hooks/use_stock_store';
-import { StockStore, StockStoreState } from '../stores/stock_store';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
+import { BASE_URL } from '../api/base';
 
 describe('StockCard', () => {
-    const renderWithStore = (component, store) => {
-        const Providers = ({ children }) => {
-            return <StockStoreProvider value={store}>{children}</StockStoreProvider>;
-        };
+    const server = setupServer(
+        rest.get(`/query`, (_req, res, ctx) => {
+            return res(
+                ctx.json({
+                    'Global Quote': {
+                        '01. symbol': 'IBM',
+                        '02. open': '141.6900',
+                        '03. high': '142.5600',
+                        '04. low': '140.7500',
+                        '05. price': '142.0100',
+                        '06. volume': '3884037',
+                        '07. latest trading day': '2021-04-27',
+                        '08. previous close': '141.5700',
+                        '09. change': '0.4400',
+                        '10. change percent': '0.3108%',
+                    },
+                }),
+            );
+        }),
+    );
 
-        return render(component, { wrapper: Providers });
-    };
+    beforeAll(() => server.listen());
+    afterEach(() => server.resetHandlers());
+    afterAll(() => server.close());
+
     const props = () => ({
         symbol: 'IBM',
         name: 'International Business Machines',
         onRemove: jest.fn(),
     });
 
-    const store = () => {
-        const store = new StockStore('IBM', 'International Business Machines');
-        store.fetch = jest.fn();
-        return store;
-    };
-
     it('is an article element', () => {
-        renderWithStore(<StockCard {...props()} />, store());
+        render(<StockCard {...props()} />);
         const article = screen.getByRole('article');
         expect(article).toBeInTheDocument();
     });
 
     it('shows a progress bar while loading', () => {
-        const loadingStore = store();
-        loadingStore.state = StockStoreState.LOADING;
-        renderWithStore(<StockCard {...props()} />, loadingStore);
+        server.use(
+            rest.get(`/query`, (_req, res, ctx) => {
+                return res(ctx.delay(1000));
+            }),
+        );
+        render(<StockCard {...props()} />);
         const progress = screen.getByRole('progressbar');
         expect(progress).toBeInTheDocument();
     });
 
-    it('shows an error message when there is an error', () => {
-        const errorStore = store();
-        errorStore.state = StockStoreState.ERROR;
-        errorStore.lastError = new Error('Boom');
-        renderWithStore(<StockCard {...props()} />, errorStore);
-        expect(screen.getByText(/There was a problem/)).toBeInTheDocument();
-        expect(screen.getByText(/Boom/)).toBeInTheDocument();
-    });
-
-    it('lets you retry when there is an error fetching', () => {
-        const errorStore = store();
-        jest.spyOn(errorStore, 'fetch');
-        errorStore.state = StockStoreState.ERROR;
-        errorStore.lastError = new Error('Boom');
-        renderWithStore(<StockCard {...props()} />, errorStore);
-        const retryBtn = screen.getByRole('button', { name: /Retry/ });
-        fireEvent.click(retryBtn);
-        expect(errorStore.fetch).toHaveBeenCalled();
+    it('shows an error message when there is an error', async () => {
+        server.use(
+            rest.get(`${BASE_URL}/query`, (_req, res, ctx) => {
+                return res(ctx.status(500));
+            }),
+        );
+        render(<StockCard {...props()} />);
+        await waitFor(() => {
+            expect(screen.getByText(/There was a problem/)).toBeInTheDocument();
+        });
     });
 });

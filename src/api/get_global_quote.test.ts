@@ -42,4 +42,21 @@ describe('Get Global Quote  API', () => {
             ),
         );
     });
+
+    it('throws when there is a server error', async () => {
+        server.use(
+            rest.get(`${BASE_URL}/query`, (_req, res, ctx) => {
+                return res(ctx.status(500));
+            }),
+        );
+        let caughtError;
+        try {
+            await getGlobalQuote('IBM');
+        } catch (error) {
+            caughtError = error;
+        } finally {
+            expect(caughtError).toBeDefined();
+            expect(caughtError.message).toBe('Internal Server Error');
+        }
+    });
 });
