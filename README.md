@@ -11,7 +11,7 @@ https://www.alphavantage.co/support/#api-key
 ## Installation
 
 1. Copy your AlphaVantage API key and paste it into the `.env` file.
-2. Run `yarn start` to install dependencies and start the development server. Access the application at http://localhost:3000.
+2. Run `yarn && yarn start` to install dependencies and start the development server. Access the application at http://localhost:3000.
 
 ## Tests
 
